@@ -18,6 +18,9 @@ namespace TgBot_ver1._11.EntityClasses
         public string? Comment { get; set; }
 
         public virtual ClientStatus? Status { get; set; }
+
+        public virtual Bot Bot {get; set; }
+
         public virtual ClientBankAccout? ClientBankAccout { get; set; }
         public virtual ICollection<Car> Cars { get; set; }
     }

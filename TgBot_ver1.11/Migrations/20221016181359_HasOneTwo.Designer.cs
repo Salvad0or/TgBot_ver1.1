@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TgBot_ver1._11;
 
@@ -11,9 +12,10 @@ using TgBot_ver1._11;
 namespace TgBot_ver1._11.Migrations
 {
     [DbContext(typeof(ITVDN2dbContext))]
-    partial class ITVDN2dbContextModelSnapshot : ModelSnapshot
+    [Migration("20221016181359_HasOneTwo")]
+    partial class HasOneTwo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,28 +24,6 @@ namespace TgBot_ver1._11.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Bot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId")
-                        .IsUnique();
-
-                    b.ToTable("Bots");
-                });
 
             modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Car", b =>
                 {
@@ -287,15 +267,27 @@ namespace TgBot_ver1._11.Migrations
                     b.ToTable("RialDataBase", (string)null);
                 });
 
-            modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Bot", b =>
+            modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Test", b =>
                 {
-                    b.HasOne("TgBot_ver1._11.EntityClasses.Client", "Cient")
-                        .WithOne("Bot")
-                        .HasForeignKey("TgBot_ver1._11.EntityClasses.Bot", "ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Cient");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameTest")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
+
+                    b.ToTable("Test", (string)null);
                 });
 
             modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Car", b =>
@@ -342,6 +334,17 @@ namespace TgBot_ver1._11.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Test", b =>
+                {
+                    b.HasOne("TgBot_ver1._11.EntityClasses.Client", "Client")
+                        .WithOne("Test")
+                        .HasForeignKey("TgBot_ver1._11.EntityClasses.Test", "ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Car", b =>
                 {
                     b.Navigation("CarCharacteristic");
@@ -349,12 +352,11 @@ namespace TgBot_ver1._11.Migrations
 
             modelBuilder.Entity("TgBot_ver1._11.EntityClasses.Client", b =>
                 {
-                    b.Navigation("Bot")
-                        .IsRequired();
-
                     b.Navigation("Cars");
 
                     b.Navigation("ClientBankAccout");
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("TgBot_ver1._11.EntityClasses.ClientStatus", b =>

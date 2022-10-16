@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TgBot_ver1._11;
 
@@ -11,9 +12,10 @@ using TgBot_ver1._11;
 namespace TgBot_ver1._11.Migrations
 {
     [DbContext(typeof(ITVDN2dbContext))]
-    partial class ITVDN2dbContextModelSnapshot : ModelSnapshot
+    [Migration("20221016191511_Iaddabot")]
+    partial class Iaddabot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

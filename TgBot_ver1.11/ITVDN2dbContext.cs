@@ -23,7 +23,8 @@ namespace TgBot_ver1._11
         public virtual DbSet<ClientBankAccout> ClientBankAccouts { get; set; } = null!;
         public virtual DbSet<ClientStatus> ClientStatuses { get; set; } = null!;
         public virtual DbSet<RialDataBase> RialDatabases { get; set; } = null!;
-        public virtual DbSet<Test> Testst { get; set; } = null!;
+        public virtual DbSet<Bot> Bots { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -83,15 +84,6 @@ namespace TgBot_ver1._11
             });
 
 
-            modelBuilder.Entity<Test>(enttity =>
-            {
-                enttity.ToTable("Test");
-
-                enttity.Property(e => e.Id);
-
-                enttity.Property(e => e.NameTest);
-            });
-
             modelBuilder.Entity<Client>(entity =>
             {
                 entity.ToTable("Client");
@@ -130,10 +122,12 @@ namespace TgBot_ver1._11
                 entity.Property(e => e.TotalPurchaseAmount).HasColumnType("decimal(18, 0)");
 
                 entity.HasOne(d => d.Client)
-                    .WithOne(p => p.ClientBankAccout)
+                    .WithOne(p => p.ClientBankAccout)        
                     .HasForeignKey<ClientBankAccout>(d => d.ClientId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__ClientBan__Clien__02925FBF");
+
+
             });
 
             modelBuilder.Entity<ClientStatus>(entity =>

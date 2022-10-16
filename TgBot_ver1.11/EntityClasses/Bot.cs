@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace TgBot_ver1._11.EntityClasses
 {
-    public class Test
+    public class Bot
     {
         public int Id { get; set; }
 
-        public string NameTest { get; set; }
+        public int ClientId { get; set; }
+
+        public int ChatId { get; set; }
+
+        public virtual Client? Cient { get; set; }
     }
 }
