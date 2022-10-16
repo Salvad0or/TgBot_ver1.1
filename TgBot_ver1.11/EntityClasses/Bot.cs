@@ -12,7 +12,7 @@ namespace TgBot_ver1._11.EntityClasses
 
         public int ClientId { get; set; }
 
-        public int ChatId { get; set; }
+        public long ChatId { get; set; }
 
         public virtual Client? Cient { get; set; }
     }
