@@ -10,7 +10,7 @@ using TgBot_ver1._11;
 
 namespace TgBot_ver1._11.Migrations
 {
-    [DbContext(typeof(ITVDN2dbContext))]
+    [DbContext(typeof(Context))]
     partial class ITVDN2dbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

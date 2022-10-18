@@ -6,13 +6,13 @@ using TgBot_ver1._11.EntityClasses;
 
 namespace TgBot_ver1._11
 {
-    public partial class ITVDN2dbContext : DbContext
+    public partial class Context : DbContext
     {
-        public ITVDN2dbContext()
+        public Context()
         {
         }
 
-        public ITVDN2dbContext(DbContextOptions<ITVDN2dbContext> options)
+        public Context(DbContextOptions<Context> options)
             : base(options)
         {
         }

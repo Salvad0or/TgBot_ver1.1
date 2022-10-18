@@ -11,7 +11,7 @@ using TgBot_ver1._11;
 
 namespace TgBot_ver1._11.Migrations
 {
-    [DbContext(typeof(ITVDN2dbContext))]
+    [DbContext(typeof(Context))]
     [Migration("20221014195452_Test1")]
     partial class Test1
     {

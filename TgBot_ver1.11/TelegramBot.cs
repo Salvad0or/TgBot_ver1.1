@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
+using Telegram.Bot.Types.ReplyMarkups;
 using TgBot_ver1._11.EntityClasses;
 
 namespace TgBot_ver1._11
@@ -13,15 +14,15 @@ namespace TgBot_ver1._11
     {
         #region private поля
 
-        private readonly string _token;
-        private TelegramBotClient Bot;
-        private CancellationTokenSource _cts;
+        private TelegramBotClient Bot {get; set; }
+        private CancellationTokenSource _cts { get; set; }
+        private Bot bot { get; set; }
+        private bool registerFlag { get; set; } = true;
 
         #endregion
 
         public TelegramBot(string token)
         {
-            _token = token;
             Bot = new TelegramBotClient(token);
             _cts = new CancellationTokenSource();
 
@@ -33,50 +34,37 @@ namespace TgBot_ver1._11
 
         public async Task UpdateHandler(ITelegramBotClient botClient, Telegram.Bot.Types.Update update, CancellationToken cancellationToken)
         {
+            long chatId = update.Message.Chat.Id;
+            string message = update.Message.Text;
+           
+            await using (Context context = new Context())
+            {
+                 bot = (from b in context.Bots
+                           where b.ChatId == chatId
+                           select b).FirstOrDefault();
+            }
 
-            Bot tgClient;
-
-
-           await using (ITVDN2dbContext context = new ITVDN2dbContext())
-           {
-                tgClient = (from bot in context.Bots
-                           where bot.ChatId == update.Message.Chat.Id 
-                           select bot).FirstOrDefault();
-
-                if (tgClient is null)
+            if (bot is null)
+            {
+                if (registerFlag) 
                 {
-                    await botClient.SendTextMessageAsync(update.Message.Chat.Id, "Вас в базе нет, внести?");
-                    await DataBaseHaventAClient(botClient, context, update);
-                    await context.SaveChangesAsync();
+                    await botClient.SendTextMessageAsync(chatId, "Давайте Вас зарегестрируем. Введите номер телефона: ");
+                    registerFlag = false;
+                    return;
                 }
-                else
-                {
-                    await botClient.SendTextMessageAsync(update.Message.Chat.Id, $"{update.Message.Chat.FirstName} Вы есть в базе");
-                }
-           }
 
+                await MessagesHandler.AddToBaseAsync(message, chatId, botClient);
+
+            }
+            else
+            {
+                await botClient.SendTextMessageAsync(chatId, "Вы зарегестрированы, код еще не написан ");
+            }
+            
             
         }
 
-
-        private async Task DataBaseHaventAClient(ITelegramBotClient Bot, ITVDN2dbContext context, Telegram.Bot.Types.Update update)
-        {
-            await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Добавляем");
-
-            Bot b = new Bot
-            {
-                ClientId = 3,
-                ChatId = update.Message.Chat.Id,
-
-            };
-
-
-            await context.Bots.AddAsync(b);
-
-            await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Успешно");
-
-        }
-
+        
 
         public async Task PoolingHandleError(ITelegramBotClient Bot, Exception e, CancellationToken token)
         {
