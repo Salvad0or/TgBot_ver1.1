@@ -117,7 +117,7 @@ namespace TgBot_ver1._11
                 foreach (var exist in ExistClient)
                 {
                     await botClient.SendTextMessageAsync(chatId, $"Ваш кешбек составляет: {exist.CashBack}\n" +
-                                                                 $"Ваше имя: {exist.Name}" +
+                                                                 $"Ваше имя: {exist.Name}\n" +
                                                                  $"Всего вы потратили у нас: {exist.Total}\n" +
                                                                  $"Ваш клиентский статус: {exist.Status}\n" +
                                                                  $"Вы заливаете масло: {exist.Oil}\n" +
