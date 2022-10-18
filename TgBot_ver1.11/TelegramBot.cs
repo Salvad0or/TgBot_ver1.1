@@ -58,7 +58,7 @@ namespace TgBot_ver1._11
             }
             else
             {
-                await botClient.SendTextMessageAsync(chatId, "Вы зарегестрированы, код еще не написан ");
+               await MessagesHandler.WorkWithExistClient(bot, chatId, botClient);
             }
             
             

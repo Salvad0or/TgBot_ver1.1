@@ -8,11 +8,9 @@ using TgBot_ver1._11.EntityClasses;
 
 namespace TgBot_ver1._11
 {
-    public static class MessagesHandler
+    public static class MessagesHandler 
     {
-        private static bool _handlerFlag { get; set; } = false;
-
-
+       
         /// <summary>
         /// Метод обработки нового клиента
         /// </summary>
@@ -81,6 +79,53 @@ namespace TgBot_ver1._11
             }
 
 
+
+        }
+
+        public async static Task WorkWithExistClient(Bot clientFromChatBot, long chatId, ITelegramBotClient botClient)
+        {
+
+
+            await using (Context contex = new Context())
+            {
+                var ExistClient = from c in contex.Clients
+                                  where c.Id == clientFromChatBot.ClientId
+
+                                  join status in contex.ClientStatuses
+                                  on c.StatusId equals status.Id
+
+                                  join cba in contex.ClientBankAccouts
+                                  on c.Id equals cba.ClientId
+
+                                  join car in contex.Cars
+                                  on c.Id equals car.ClientId
+
+                                  join carCh in contex.CarCharacteristics
+                                  on car.Id equals carCh.CarId
+
+                                  select new
+                                  {
+                                      Name = c.Fname ?? "Не было указано",
+                                      Status = status.Status,
+                                      CashBack = cba.CashBack,
+                                      Total = cba.TotalPurchaseAmount,
+                                      Oil = carCh.Oil ?? "Не было указано",
+                                      Vin = car.Vin ?? "Не было указано",
+                                  };
+
+
+                foreach (var exist in ExistClient)
+                {
+                    await botClient.SendTextMessageAsync(chatId, $"Ваш кешбек составляет: {exist.CashBack}\n" +
+                                                                 $"Ваше имя: {exist.Name}" +
+                                                                 $"Всего вы потратили у нас: {exist.Total}\n" +
+                                                                 $"Ваш клиентский статус: {exist.Status}\n" +
+                                                                 $"Вы заливаете масло: {exist.Oil}\n" +
+                                                                 $"Вин номер вашего авто: {exist.Vin}\n");
+                }
+
+                
+            }
 
         }
     }
